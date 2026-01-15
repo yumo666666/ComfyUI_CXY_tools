@@ -29,8 +29,11 @@
 | 线稿图（线稿提取） | sk_model2.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/sk_model2.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/sk_model2.pth |
 | 线稿图（软边缘/HED） | network-bsds500.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/network-bsds500.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/network-bsds500.pth |
 | 线稿图（直线/MLSD） | mlsd_large_512_fp32.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/mlsd_large_512_fp32.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/mlsd_large_512_fp32.pth |
+| 骨架姿势图（DWPose-检测器） | yolox_l.onnx | https://huggingface.co/yzd-v/DWPose/resolve/main/yolox_l.onnx | https://hf-mirror.com/yzd-v/DWPose/resolve/main/yolox_l.onnx |
+| 骨架姿势图（DWPose-姿态） | dw-ll_ucoco_384.onnx | https://huggingface.co/yzd-v/DWPose/resolve/main/dw-ll_ucoco_384.onnx | https://hf-mirror.com/yzd-v/DWPose/resolve/main/dw-ll_ucoco_384.onnx |
 | 骨架姿势图（OpenPose） | body_pose_model.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/body_pose_model.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/body_pose_model.pth |
 | 骨架姿势图（OpenPose） | hand_pose_model.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/hand_pose_model.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/hand_pose_model.pth |
+| 骨架姿势图（OpenPose-脸） | facenet.pth | https://huggingface.co/lllyasviel/Annotators/resolve/main/facenet.pth | https://hf-mirror.com/lllyasviel/Annotators/resolve/main/facenet.pth |
 
 ## 推荐手动下载流程
 
@@ -58,6 +61,7 @@
 
 - 输入：IMAGE（固定只取第一张）
 - 类型：深度图 / 线稿图 / 骨架姿势图
-- 选项：会随“类型”联动变化
+- 选项：同一个下拉框内包含深度/线稿/姿态所有选项；选择与“类型”匹配的即可
+- 骨架姿势图：可选 DWPose（支持脸与手指）或 OpenPose
 - 下载源：国内/外网（国内使用 hf-mirror）
 

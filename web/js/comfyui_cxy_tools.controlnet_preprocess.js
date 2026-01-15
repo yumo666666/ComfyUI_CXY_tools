@@ -22,7 +22,7 @@ function linkPreprocessCombos(node) {
   const optionMap = {
     深度图: ["MiDaS", "ZoeDepth", "LeReS"],
     线稿图: ["线稿提取", "软边缘", "硬边缘", "直线"],
-    骨架姿势图: ["OpenPose"],
+    骨架姿势图: ["DWPose", "OpenPose"],
   };
 
   const applyOptions = () => {
@@ -35,14 +35,34 @@ function linkPreprocessCombos(node) {
     markDirty(node);
   };
 
+  const scheduleApply = () => {
+    try { applyOptions(); } catch (e) {}
+    setTimeout(() => { try { applyOptions(); } catch (e) {} }, 0);
+    setTimeout(() => { try { applyOptions(); } catch (e) {} }, 100);
+    setTimeout(() => { try { applyOptions(); } catch (e) {} }, 250);
+    setTimeout(() => { try { applyOptions(); } catch (e) {} }, 500);
+  };
+
+  const arraysEqual = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((x, i) => x === b[i]);
+  const syncOptions = () => {
+    const mainVal = String(mainWidget.value || "线稿图");
+    const desired = optionMap[mainVal] || optionMap["线稿图"];
+    const current = (subWidget.options && subWidget.options.values) ? subWidget.options.values : [];
+    if (!arraysEqual(current, desired) || !desired.includes(subWidget.value)) {
+      subWidget.options.values = desired;
+      if (!desired.includes(subWidget.value)) subWidget.value = desired[0];
+      markDirty(node);
+    }
+  };
+
   const originalCallback = mainWidget.callback;
   mainWidget.callback = function () {
     const rr = originalCallback ? originalCallback.apply(this, arguments) : undefined;
-    applyOptions();
+    scheduleApply();
     return rr;
   };
 
-  applyOptions();
+  scheduleApply();
 }
 
 function pinCategoryToNodeLibraryTop(categoryName) {
