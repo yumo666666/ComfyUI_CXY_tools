@@ -26,17 +26,23 @@ class ContainsAnyDict(dict):
     """用于接收前端动态创建输入端口的可选输入字典。"""
 
     def __contains__(self, key: object) -> bool:
-        return True
+        """仅允许以 image_ 开头的动态输入端口通过可选输入校验。"""
+
+        return isinstance(key, str) and key.lower().startswith("image_")
 
     def __getitem__(self, key: str) -> Tuple[str, Dict[str, Any]]:
         """为任意动态输入名提供默认类型，避免校验阶段KeyError。"""
 
-        return ("IMAGE", {})
+        if isinstance(key, str) and key.lower().startswith("image_"):
+            return ("IMAGE", {})
+        raise KeyError(key)
 
     def get(self, key: str, default: Any = None) -> Tuple[str, Dict[str, Any]]:
         """为任意动态输入名提供默认类型。"""
 
-        return ("IMAGE", {})
+        if isinstance(key, str) and key.lower().startswith("image_"):
+            return ("IMAGE", {})
+        return default
 
 
 def _get_plugin_root_dir() -> str:

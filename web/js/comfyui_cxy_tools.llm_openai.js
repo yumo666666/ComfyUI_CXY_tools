@@ -528,10 +528,13 @@ function ensureNumericDefaults(node) {
 }
 
 function ensurePresetPreviewWidget(node) {
-  for (let i = (node.widgets || []).length - 1; i >= 0; i--) {
-    const w = node.widgets[i];
-    if (w?.name === PRESET_PREVIEW_DISPLAY_OLD) {
-      node.widgets.splice(i, 1);
+  const configured = Boolean(node?.properties?._llmConfigured);
+  if (configured) {
+    for (let i = (node.widgets || []).length - 1; i >= 0; i--) {
+      const w = node.widgets[i];
+      if (w?.name === PRESET_PREVIEW_DISPLAY_OLD) {
+        node.widgets.splice(i, 1);
+      }
     }
   }
 
@@ -542,14 +545,6 @@ function ensurePresetPreviewWidget(node) {
   patchPresetPreviewWidget(existing);
   existing._llmHidden = false;
   clampWidgetHeight(existing, FIVE_LINE_HEIGHT);
-
-  const presetIdx = (node.widgets || []).findIndex((w) => w.name === "preset");
-  const widgetIdx = (node.widgets || []).findIndex((w) => w.name === PRESET_PREVIEW_KEY || w.name === PRESET_PREVIEW_KEY_OLD);
-  if (presetIdx >= 0 && widgetIdx >= 0 && widgetIdx !== presetIdx + 1) {
-    const ws = node.widgets;
-    const [moved] = ws.splice(widgetIdx, 1);
-    ws.splice(presetIdx + 1, 0, moved);
-  }
 
   return existing;
 }
@@ -722,6 +717,7 @@ app.registerExtension({
       const r = onNodeCreated ? onNodeCreated.apply(this, arguments) : undefined;
       if (!this.properties) this.properties = {};
       this.properties._comfyui_llm_openai = true;
+      this.properties._llmConfigured = false;
       ensureDynamicImagePorts(this);
       refreshNodeCombos(this).catch(() => {});
       patchTextWidgetPlaceholder(this);
@@ -746,6 +742,8 @@ app.registerExtension({
     nodeType.prototype.onConfigure = function () {
       const r = onConfigure ? onConfigure.apply(this, arguments) : undefined;
       try {
+        if (!this.properties) this.properties = {};
+        this.properties._llmConfigured = true;
         patchTextWidgetPlaceholder(this);
         ensureNumericDefaults(this);
         ensurePresetPreviewWidget(this);
