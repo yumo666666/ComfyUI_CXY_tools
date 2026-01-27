@@ -8,7 +8,7 @@ from ..ComfyUI_Annotator_Preprocess.controlnet_preprocess import _pick_first_ima
 class ImageCompareNode:
     """输入两张图，节点内可用鼠标悬浮进行对比显示。"""
 
-    CATEGORY = "CXY工具"
+    CATEGORY = "CXY工具/图片处理"
     OUTPUT_NODE = True
     RETURN_TYPES = ()
     RETURN_NAMES = ()
